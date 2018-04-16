@@ -2,39 +2,67 @@ import React, { Component } from "react";
 import logo from "./baa_logo.png";
 import "./App.css";
 import results from "./data/5k.js";
-
 import "react-table/react-table.css";
 import ReactTable from "react-table";
+
+let browserWidth = Math.max(
+  document.body.scrollWidth,
+  document.documentElement.scrollWidth,
+  document.body.offsetWidth,
+  document.documentElement.offsetWidth,
+  document.documentElement.clientWidth
+);
 
 let data = results.map(function(result, index) {
   return { ...result, rank: index + 1 };
 });
 
-const columns = [
+let columns = [
   {
     Header: "Rank",
-    accessor: "rank",
-    maxWidth: 100
+    accessor: "rank"
   },
   {
     Header: "Name",
     accessor: "name"
   },
   {
-    Header: "Sex",
-    accessor: "sex",
-    maxWidth: 100
-  },
-  {
+    id: "sexAge",
     Header: "Age",
-    accessor: "age",
-    maxWidth: 100
+    accessor: row => row.sex + row.age
   },
   {
     Header: "5K",
     accessor: "display"
   }
 ];
+
+let mobileColumns = [
+  {
+    Header: "#",
+    accessor: "rank",
+    maxWidth: 50
+  },
+  {
+    Header: "Name",
+    accessor: "name"
+  },
+  {
+    id: "sexAge",
+    Header: "Age",
+    accessor: row => row.sex + row.age,
+    maxWidth: 50
+  },
+  {
+    Header: "5K",
+    accessor: "display",
+    maxWidth: 75
+  }
+];
+
+if (browserWidth < 1000) {
+  columns = mobileColumns;
+}
 
 class App extends Component {
   constructor(props) {
@@ -86,7 +114,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">2018 B.A.A Distance Medley Standings</h1>
+          <h1 className="App-title">2018 B.A.A Distance Medley</h1>
         </header>
 
         <div className="division-selector">
